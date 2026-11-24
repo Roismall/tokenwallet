@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenWallet — Add any ERC-20 token to your wallet in one click</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <h1>TokenWallet</h1>
+    <p class="tagline">Add any ERC-20 token to your wallet in one click — with the correct symbol and decimals.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- 1. Wallet connection -->
+  <section class="card" id="wallet-card">
+    <h2>1. Connect your wallet</h2>
+    <p class="muted">Works with any injected wallet: MetaMask, Trust Wallet (browser extension), TokenPocket, Coinbase Wallet, Exodus Web3, and more. This site never asks for your seed phrase or private key — it only asks your wallet to display a token.</p>
+    <div class="row">
+      <button id="connectBtn" class="btn primary">Connect wallet</button>
+      <button id="disconnectBtn" class="btn" disabled>Disconnect</button>
+    </div>
+    <div id="walletStatus" class="status">Not connected.</div>
+    <div id="detectedWallets" class="wallet-list"></div>
+    <div class="row" id="chainRow" hidden>
+      <label for="chainSelect">Network</label>
+      <select id="chainSelect"></select>
+      <button id="switchChainBtn" class="btn">Switch network</button>
+    </div>
+    <p class="muted small">On mobile, open this page inside your wallet's built-in browser:
+      <a id="trustOpenLink" href="#" target="_blank" rel="noopener">Open in Trust Wallet</a> ·
+      <button id="copyUrlBtn" class="linklike">Copy page link</button> (paste it into TokenPocket / Exodus / Trust Wallet dApp browser)
+    </p>
+  </section>
+
+  <!-- 2. Token details -->
+  <section class="card" id="token-card">
+    <h2>2. Token details</h2>
+    <div class="grid">
+      <label>Contract address
+        <input id="tokenAddress" type="text" placeholder="0x..." spellcheck="false" autocomplete="off">
+      </label>
+      <label>Symbol
+        <input id="tokenSymbol" type="text" placeholder="e.g. USDC" maxlength="11" spellcheck="false">
+      </label>
+      <label>Decimals
+        <input id="tokenDecimals" type="number" min="0" max="18" placeholder="e.g. 6">
+      </label>
+      <label>Logo image URL (optional)
+        <input id="tokenImage" type="url" placeholder="https://.../logo.png" spellcheck="false">
+      </label>
+    </div>
+    <div class="row">
+      <button id="fetchMetaBtn" class="btn">Read symbol &amp; decimals from chain</button>
+      <button id="addTokenBtn" class="btn primary big">Add token to wallet</button>
+    </div>
+    <div id="tokenStatus" class="status">Fill in the token, or pick a preset below.</div>
+    <div id="tokenPreview" class="preview" hidden>
+      <img id="previewImg" alt="" width="32" height="32">
+      <div><strong id="previewSymbol"></strong><br><span id="previewAddress" class="mono small"></span></div>
+    </div>
+  </section>
+
+  <!-- 3. Presets -->
+  <section class="card">
+    <h2>Popular tokens</h2>
+    <p class="muted">One click fills the form. Verify the address against the project's official docs before adding.</p>
+    <div id="presetList" class="preset-list"></div>
+  </section>
+
+  <!-- 4. Manual add (hardware / wallets without watchAsset) -->
+  <section class="card">
+    <h2>3. Manual add — Ledger, Exodus &amp; others</h2>
+    <p class="muted">Ledger Nano S, Exodus and some wallets do not support the automatic prompt. Copy the details and add the token by hand:</p>
+    <ol class="steps">
+      <li>Open your wallet and go to <strong>Add custom token</strong>.</li>
+      <li>Paste the contract address below, then the symbol and decimals.</li>
+      <li>Confirm — the token appears with your real balance. Nothing leaves your device.</li>
+    </ol>
+    <div class="copybox">
+      <div><span class="lbl">Address</span><code id="copyAddress" class="mono">—</code><button class="btn small" data-copy="copyAddress">Copy</button></div>
+      <div><span class="lbl">Symbol</span><code id="copySymbol" class="mono">—</code><button class="btn small" data-copy="copySymbol">Copy</button></div>
+      <div><span class="lbl">Decimals</span><code id="copyDecimals" class="mono">—</code><button class="btn small" data-copy="copyDecimals">Copy</button></div>
+    </div>
+  </section>
+
+  <!-- 5. History -->
+  <section class="card">
+    <h2>Recently added</h2>
+    <ul id="historyList" class="history"><li class="muted">Nothing added yet in this browser.</li></ul>
+    <button id="clearHistoryBtn" class="btn small">Clear history</button>
+  </section>
+
+  <section class="card log-card">
+    <h2>Activity log</h2>
+    <pre id="log" class="log"></pre>
+  </section>
+
+  <footer class="muted small">
+    TokenWallet is a non-custodial helper. It never touches your funds, never reads balances for any other purpose, and never asks for a seed phrase or private key. Token metadata is read directly from the chain (symbol(), decimals()) when available.
+  </footer>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
